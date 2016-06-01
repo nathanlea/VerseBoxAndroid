@@ -108,6 +108,7 @@ public class Books extends Fragment {
             textview.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        ((VerseSelector)c).setCurrentBook(Integer.parseInt(textview.getHint()+""));
                         ((VerseSelector)c).mViewPager.setCurrentItem(1, true);
                     }
                 });

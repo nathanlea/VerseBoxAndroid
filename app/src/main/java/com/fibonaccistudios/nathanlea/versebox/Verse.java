@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,8 +88,15 @@ public class Verse extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_verse, container, false);
 
+        int bookNum = ((VerseSelector)c).getCurrentBook();
+        int chpaterNum = ((VerseSelector)c).getCurrentChapter();
+
+        boolean finished = false;
+
+        Log.d("VERSECHAPTER", "B: "+bookNum+" C " + chpaterNum);
+
         TableLayout tl = (TableLayout) v.findViewById(R.id.chapterTable);
-        for(int i = 1; i < 20; i++) {
+        for(int i = 1; !finished; i++) {
             TableRow tr1 = new TableRow(getC());
             tr1.setId(i+100);
             tr1.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.FILL_PARENT));
@@ -97,6 +105,12 @@ public class Verse extends Fragment {
                 textview.setId((j*j*2)+1);
                 textview.setText(((i*4)+j-4)+"");
                 textview.setTextColor(Color.BLACK);
+                bookNum = ((VerseSelector)c).getCurrentBook();
+                chpaterNum = ((VerseSelector)c).getCurrentChapter();
+                if(bible.books.get(bookNum).chapter.get(chpaterNum).getVerses() == ((i*4)+j-4)) {
+                    finished = true;
+                    break;
+                }
                 if(((i*4)+j-4)<10) {
                     textview.setPadding(105,5,105,5);
                 } else

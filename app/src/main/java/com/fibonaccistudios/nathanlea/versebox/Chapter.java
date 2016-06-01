@@ -89,9 +89,14 @@ public class Chapter extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_chapter, container, false);
 
-        TableLayout tl = (TableLayout) v.findViewById(R.id.chapterTable);
+        int bookNum = ((VerseSelector)c).getCurrentBook();
 
-        for(int i = 1; i < 20; i++) {
+        Log.d("BOOK", "B: "+bookNum);
+
+        TableLayout tl = (TableLayout) v.findViewById(R.id.chapterTable);
+        boolean finished = false;
+
+        for(int i = 1; !finished; i++) {
             TableRow tr1 = new TableRow(getC());
             tr1.setId(i*101);
             tr1.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.FILL_PARENT, TableRow.LayoutParams.FILL_PARENT));
@@ -99,6 +104,11 @@ public class Chapter extends Fragment {
                 final TextView textview = new TextView(getC());
                 textview.setId(((j*j*2)+1)*73);
                 textview.setText(((i*4)+j-4)+"");
+                bookNum = ((VerseSelector)c).getCurrentBook();
+                if(bible.books.get(bookNum).chapter.size() == (i*4)+j-4) {
+                    finished = true;
+                    break;
+                }
                 textview.setTextColor(Color.BLACK);
                 if(((i*4)+j-4)<10) {
                     textview.setPadding(105,5,105,5);
@@ -114,7 +124,9 @@ public class Chapter extends Fragment {
                         for(int i = 0; i < chapterNumber.size(); i++) {
                             chapterNumber.get(i).setBackgroundResource(android.R.color.white);
                         }
+                        ((VerseSelector)c).setCurrentChapter(Integer.parseInt(textview.getText()+""));
                         textview.setBackgroundResource(R.color.colorAccent);
+                        ((VerseSelector)c).mViewPager.setCurrentItem(2, true);
                     }
                 });
                 chapterNumber.add(textview);

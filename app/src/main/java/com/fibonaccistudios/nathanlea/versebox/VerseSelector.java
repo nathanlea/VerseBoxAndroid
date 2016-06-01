@@ -9,6 +9,7 @@ import android.os.Parcelable;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -69,10 +70,6 @@ public class VerseSelector extends AppCompatActivity implements Books.OnFragment
 
     }
 
-    public void setCurrentTab(int tab_index){
-        mViewPager.setCurrentItem(tab_index);
-    }
-
     public void setCurrentBook(int book) {
         this.curBook = book;
     }
@@ -89,7 +86,7 @@ public class VerseSelector extends AppCompatActivity implements Books.OnFragment
     public int getCurrentBook( ) {
         return curBook;
     }
-    public int getCurChapter() {
+    public int getCurrentChapter() {
         return curChapter;
     }
     public int getStartVerse() {
@@ -188,10 +185,14 @@ public class VerseSelector extends AppCompatActivity implements Books.OnFragment
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
+        }
+
+        public int getItemPosition(Object item) {
+                return POSITION_NONE;
         }
 
         @Override

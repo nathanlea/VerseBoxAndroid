@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
 
-                    Intent i = new Intent(getBaseContext(), VerseSelector.class);
+                    Intent i = new Intent(getBaseContext(), VersePicker.class);
                     startActivity(i);
 
                     Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
