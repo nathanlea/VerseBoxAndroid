@@ -115,8 +115,6 @@ public class Books extends Fragment {
             tr1.addView(textview);
             tl.addView(tr1, new TableLayout.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.FILL_PARENT));
         }
-        Snackbar.make(v, "Created Table View", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
         return v;
     }
 
