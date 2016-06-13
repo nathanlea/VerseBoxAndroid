@@ -2,10 +2,12 @@ package com.fibonaccistudios.nathanlea.versebox;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,10 +24,12 @@ import android.widget.TextView;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -277,6 +281,20 @@ public class VersePicker extends AppCompatActivity {
     }
 
     public void updatePreviewBox() {
+        List<BibleXMLParser.Entry> entry = null;
+        if(MainActivity.GloablBibleMap != null) {
+            entry = MainActivity.GloablBibleMap.get(MainActivity.bookID.get(bookIndex - 1).ID + "." + chapterNumber);
+
+            if (entry != null) {
+                StringBuilder sb = new StringBuilder();
+                for (int i = startVerse; i <= endVerse; i++) {
+                    sb.append(entry.get(i).text);
+                    sb.append(" ");
+                }
+                preview.setText(sb.toString());
+                return;
+            }
+        }
         new DownloadVerseTask().execute("");
     }
 
@@ -310,7 +328,28 @@ public class VersePicker extends AppCompatActivity {
                     is = conn.getInputStream();
 
                     try {
-                        return new BibleXMLParser().parse(is);
+                        List<BibleXMLParser.Entry> entry = new BibleXMLParser().parse(is);
+                        MainActivity.GloablBibleMap.put(MainActivity.bookID.get(bookIndex-1).ID+"."+chapterNumber, entry);
+
+                        BufferedOutputStream out = null;
+                        try {
+                            out = new BufferedOutputStream(openFileOutput(MainActivity.BibleFileName, Context.MODE_PRIVATE));
+                            ObjectOutputStream oos = new ObjectOutputStream(out);
+                            oos.writeObject(MainActivity.GloablBibleMap);
+                            oos.flush();
+                            oos.close();
+                        }
+                        catch (Exception ex) {
+                            if (out != null) {
+                                try {
+                                    out.close();
+                                } catch (Exception e) {
+                                    //assert true;
+                                }
+                            }
+                        }
+
+                        return entry;
                     } catch (Exception e) {
                         return null;
                     }
@@ -383,8 +422,12 @@ public class VersePicker extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        //Log.d("MENU", id + " : ");
+
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_next) {
+            Intent i = new Intent(this, VerseOptions.class);
+            startActivity(i);
             return true;
         }
 

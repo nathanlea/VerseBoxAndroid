@@ -18,15 +18,29 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.FormatFlagsConversionMismatchException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
     static List<BooksIDXMLParser.Book> bookID;
+    static Map<String, List<BibleXMLParser.Entry>> GloablBibleMap;
+    public final String BookIDFileName = "BOOKSID";
+    public final static String BibleFileName = "Bible.bible";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +62,43 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-        new DownloadBooksID().execute("");
+        File file = new File(getFilesDir() + "/" + BookIDFileName);
+        BufferedInputStream in = null;
+        try {
+            in = new BufferedInputStream(new FileInputStream(file));
+            ObjectInputStream oin = new ObjectInputStream(new BufferedInputStream(in));
+            bookID = (List<BooksIDXMLParser.Book>) oin.readObject();
+            oin.close();
+            in.close();
+            if(bookID == null) {
+                new DownloadBooksID().execute("");
+            }
+        } catch (Exception e) {
+            new DownloadBooksID().execute("");
+        } finally {
+            try {
+                if(in != null)
+                    in.close();
+            } catch (Exception e) {}
+        }
+
+        file = new File(getFilesDir() + "/" + BibleFileName);
+        in = null;
+        try {
+            in = new BufferedInputStream(new FileInputStream(file));
+            ObjectInputStream oin = new ObjectInputStream(new BufferedInputStream(in));
+            GloablBibleMap = (Map<String, List<BibleXMLParser.Entry>>) oin.readObject();
+            oin.close();
+            in.close();
+        } catch (Exception e) {
+            GloablBibleMap = new HashMap<>();
+        } finally {
+            try {
+                if(in != null)
+                    in.close();
+            } catch (Exception e) {}
+        }
+
     }
 
 
@@ -98,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             is.close();
                         } catch (Exception e) {
-
+                            //assert true;
                         }
                     }
                 }
@@ -131,7 +181,26 @@ public class MainActivity extends AppCompatActivity {
                 textView.setTextColor(Color.YELLOW);
                 snackbar.show();*/
             } else {
+                //Save result
                 bookID = result;
+                BufferedOutputStream out = null;
+                try {
+                    out = new BufferedOutputStream(openFileOutput(BookIDFileName, Context.MODE_PRIVATE));
+                    ObjectOutputStream oos = new ObjectOutputStream(out);
+                    oos.writeObject(bookID);
+                    oos.flush();
+                    oos.close();
+                }
+                catch (Exception ex) {
+                    if (out != null) {
+                        try {
+                            out.close();
+                        } catch (Exception e) {
+                            //assert true;
+                        }
+                    }
+                }
+
             }
         }
     }

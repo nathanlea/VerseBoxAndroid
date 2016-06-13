@@ -2,6 +2,7 @@
     <string name="app_name">VerseBox</string>
     <string name="action_settings">Settings</string>
     <string name="action_next">Next</string>
+    <string name="action_finish">Finish</string>
     <string name="title_activity_verse_selector">VerseSelector</string>
     <string name="section_format">Hello World from section: %1$d</string>
 

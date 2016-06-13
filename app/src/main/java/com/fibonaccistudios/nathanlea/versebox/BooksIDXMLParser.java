@@ -7,6 +7,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,7 +65,7 @@ public class BooksIDXMLParser {
 
     // This class represents a single entry (post) in the XML feed.
     // It includes the data members "title," "link," and "summary."
-    public static class Book {
+    public static class Book implements Serializable {
         public final String ID;
 
         private Book(String ID) {

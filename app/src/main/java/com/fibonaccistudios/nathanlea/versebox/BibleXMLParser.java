@@ -7,6 +7,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -66,7 +67,7 @@ public class BibleXMLParser {
 
     // This class represents a single entry (post) in the XML feed.
     // It includes the data members "title," "link," and "summary."
-    public static class Entry {
+    public static class Entry implements Serializable {
         public final String verse;
         public final String reference;
         public final String text;
