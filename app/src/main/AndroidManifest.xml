@@ -26,7 +26,7 @@
             android:label="@string/title_activity_verse_selector"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".VersePicker" />
-        <activity android:name=".VerseOptions" android:parentActivityName=".VersePicker">
+        <activity android:name=".VerseOptions" >
         </activity>
     </application>
 

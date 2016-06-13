@@ -427,10 +427,28 @@ public class VersePicker extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_next) {
             Intent i = new Intent(this, VerseOptions.class);
-            startActivity(i);
+            i.putExtra("bookIndex", bookIndex);
+            i.putExtra("chapterNumber", chapterNumber);
+            i.putExtra("startVerse", startVerse);
+            i.putExtra("endVerse", endVerse);
+            startActivityForResult(i, RESULT_CANCELED);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == RESULT_CANCELED) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                //We are coming back here set the correct vars
+                bookIndex = (int)data.getExtras().get("bookIndex");
+                chapterNumber = (int)data.getExtras().get("chapterNumber");
+                startVerse = (int)data.getExtras().get("startVerse");
+                endVerse = (int)data.getExtras().get("endVerse");
+            }
+        }
     }
 }

@@ -1,12 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.fibonaccistudios.nathanlea.versebox.VerseOptions">
+    android:id="@+id/scrollView4">
 
-</RelativeLayout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        tools:context="com.fibonaccistudios.nathanlea.versebox.VerseOptions"
+        android:orientation="vertical">
+
+        <!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
+        <LinearLayout
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_width="0px"
+            android:layout_height="0px"/>
+
+        <!-- A CardView that contains a TextView -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Front"
+            android:id="@+id/textView11"
+            android:padding="3dp" />
+
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view_front"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            card_view:cardCornerRadius="4dp"
+            card_view:elevation="4dp">
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="50sp"
+                android:text="VERSE REF"
+                android:id="@+id/verseRef_TV"
+                android:layout_centerInParent="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date"
+                android:id="@+id/startDate_TV"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_alignParentBottom="true" android:background="@null" android:padding="3dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date2"
+                android:id="@+id/endDate_TV"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true" android:background="@null" android:padding="3dp" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Section"
+                android:id="@+id/section_TV"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true" android:background="@null"
+                android:padding="3dp"
+                />
+
+            <!-- :nextFocusUp and :nextFocusLeft have been set to the id of this component
+                to prevent the dummy from receiving focus again -->
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Topic"
+                android:id="@+id/topic_TV"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:background="@null"
+                android:padding="3dp"
+                android:nextFocusUp="@id/topic_TV"
+                android:nextFocusLeft="@id/topic_TV"  />
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Back"
+            android:id="@+id/textView13" android:padding="3dp"  />
+
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view_back"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            card_view:cardCornerRadius="4dp"
+            card_view:elevation="4dp">
+
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Verse Preview"
+                    android:id="@+id/verse_preview_tv"
+                    android:layout_centerInParent="true" android:background="@null" android:padding="3dp" />
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+</LinearLayout>
+
+</ScrollView>
