@@ -443,6 +443,9 @@ public class VersePicker extends AppCompatActivity {
         if (requestCode == RESULT_CANCELED) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
+                finish();
+            }
+            else if (resultCode == RESULT_CANCELED) {
                 //We are coming back here set the correct vars
                 bookIndex = (int)data.getExtras().get("bookIndex");
                 chapterNumber = (int)data.getExtras().get("chapterNumber");

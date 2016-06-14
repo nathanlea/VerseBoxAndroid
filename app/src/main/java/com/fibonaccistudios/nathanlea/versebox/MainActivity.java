@@ -18,6 +18,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -30,6 +32,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.FormatFlagsConversionMismatchException;
 import java.util.HashMap;
 import java.util.List;
@@ -39,8 +42,10 @@ public class MainActivity extends AppCompatActivity {
 
     static List<BooksIDXMLParser.Book> bookID;
     static Map<String, List<BibleXMLParser.Entry>> GloablBibleMap;
+    static List<VerseCard> verseList = new ArrayList<>();
     public final String BookIDFileName = "BOOKSID";
     public final static String BibleFileName = "Bible.bible";
+    private TextView temp;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,8 +104,20 @@ public class MainActivity extends AppCompatActivity {
             } catch (Exception e) {}
         }
 
+        Verses.loadVerses(this);
+
+        temp = (TextView) findViewById(R.id.tempVerseNum);
+        temp.setText("Number: " + verseList.size());
+
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Verses.loadVerses(this);
+
+        temp.setText("Number: " + verseList.size());
+    }
 
     private class DownloadBooksID extends AsyncTask<String, Void, List<BooksIDXMLParser.Book>> {
         /** The system calls this to perform work in a worker thread and
