@@ -4,11 +4,14 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import java.util.List;
@@ -26,7 +29,7 @@ public class VerseAdapter extends RecyclerView.Adapter<VerseAdapter.VerseViewHol
         TextView verseRef, topic, section, sDate, eDate;
 
 
-        VerseViewHolder(View itemView) {
+        VerseViewHolder(View itemView, final Context context) {
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.card_view_front);
             verseRef = (TextView)itemView.findViewById(R.id.verseRefFrag);
@@ -37,6 +40,33 @@ public class VerseAdapter extends RecyclerView.Adapter<VerseAdapter.VerseViewHol
 
             AutofitHelper verseAUTO = AutofitHelper.create(verseRef);
             verseAUTO.setMaxLines(1);
+
+            cv.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    PopupMenu pm = new PopupMenu(context, v);
+                    pm.inflate(R.menu.card_view_menu);
+                    pm.show();
+                    pm.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            if(item.getTitle().equals("Edit")) {
+                                //TODO Edit
+                                //Go to edit page
+                                //TODO
+                            } else if (item.getTitle().equals("Delete")) {
+                                //TODO Delete
+                                //Confirm they want to delete then
+                                // delete from master list and save list
+                            } else {
+                                //TBD
+                            }
+                            return false;
+                        }
+                    });
+                    return false;
+                }
+            });
         }
     }
 
@@ -60,7 +90,7 @@ public class VerseAdapter extends RecyclerView.Adapter<VerseAdapter.VerseViewHol
     @Override
     public VerseViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragement_verse_front, viewGroup, false);
-        VerseViewHolder vvh = new VerseViewHolder(v);
+        VerseViewHolder vvh = new VerseViewHolder(v, c);
         //new addViewToPage().execute(vvh, verseCards, i, c);
         return vvh;
     }

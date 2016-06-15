@@ -380,8 +380,6 @@ public class MainActivity extends AppCompatActivity {
                     adapter.progressDialog.show();
                     return secondView;
                 }
-
-
             } else {
                 rootView = inflater.inflate(R.layout.fragment_planet, container, false);
                 int i = getArguments().getInt(ARG_PLANET_NUMBER);
