@@ -8,8 +8,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string-array name="planets_array">
-        <item>Mercury</item>
+    <string-array name="home_nav_bar">
+        <item>Home</item>
+        <item>All Verses</item>
         <item>Venus</item>
         <item>Earth</item>
         <item>Mars</item>

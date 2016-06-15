@@ -1,5 +1,7 @@
 package com.fibonaccistudios.nathanlea.versebox;
 
+import android.app.FragmentManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -8,19 +10,24 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -37,6 +44,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
@@ -67,12 +75,8 @@ public class MainActivity extends AppCompatActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     Intent i = new Intent(getBaseContext(), VersePicker.class);
                     startActivity(i);
-
-                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
                 }
             });
         }
@@ -115,12 +119,12 @@ public class MainActivity extends AppCompatActivity {
 
         Verses.loadVerses(this);
 
-        temp = (TextView) findViewById(R.id.tempVerseNum);
-        temp.setText("Number: " + verseList.size());
+        //temp = (TextView) findViewById(R.id.tempVerseNum);
+        //temp.setText("Number: " + verseList.size());
 
         mTitle = mDrawerTitle = getTitle();
         mDrawerLayout = (DrawerLayout) this.findViewById(R.id.drawer_layout);
-        mPlanetTitles = getResources().getStringArray(R.array.planets_array);
+        mPlanetTitles = getResources().getStringArray(R.array.home_nav_bar);
 
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
@@ -168,8 +172,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Verses.loadVerses(this);
+        selectItem(0);
 
-        temp.setText("Number: " + verseList.size());
+        //temp.setText("Number: " + verseList.size());
     }
 
     private class DownloadBooksID extends AsyncTask<String, Void, List<BooksIDXMLParser.Book>> {
@@ -284,24 +289,23 @@ public class MainActivity extends AppCompatActivity {
 
     private void selectItem(int position) {
         // update the main content by replacing fragments
-        //Fragment fragment = new PlanetFragment();
-        //Bundle args = new Bundle();
-        //args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
-        //fragment.setArguments(args);
+        Fragment fragment = new PlanetFragment();
+        Bundle args = new Bundle();
+        args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
+        fragment.setArguments(args);
 
-        //FragmentManager fragmentManager = getFragmentManager();
-       // fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_content_view, fragment).commit();
 
         // update selected item and title, then close the drawer
-       /// mDrawerList.setItemChecked(position, true);
-        //setTitle(mPlanetTitles[position]);
-        //mDrawerLayout.closeDrawer(mDrawerList);
+        mDrawerList.setItemChecked(position, true);
+        setTitle(mPlanetTitles[position]);
+        mDrawerLayout.closeDrawer(mDrawerList);
     }
 
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;
-        getActionBar().setTitle(mTitle);
+        getSupportActionBar().setTitle(mTitle);
     }
 
     /**
@@ -313,21 +317,22 @@ public class MainActivity extends AppCompatActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
-        //mDrawerToggle.syncState();
+        mDrawerToggle.syncState();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         // Pass any configuration change to the drawer toggls
-        //mDrawerToggle.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     /**
      * Fragment that appears in the "content_frame", shows a planet
      */
-   /*public static class PlanetFragment extends Fragment {
+   public static class PlanetFragment extends Fragment {
         public static final String ARG_PLANET_NUMBER = "planet_number";
+        static  View secondView;
 
         public PlanetFragment() {
             // Empty constructor required for fragment subclasses
@@ -336,17 +341,60 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_planet, container, false);
-            int i = getArguments().getInt(ARG_PLANET_NUMBER);
-            String planet = getResources().getStringArray(R.array.planets_array)[i];
+            View rootView;
+            if(getArguments().getInt(ARG_PLANET_NUMBER) == 0) {
 
-            int imageId = getResources().getIdentifier(planet.toLowerCase(Locale.getDefault()),
-                    "drawable", getActivity().getPackageName());
-            ((ImageView) rootView.findViewById(R.id.image)).setImageResource(imageId);
-            getActivity().setTitle(planet);
+                rootView = inflater.inflate(R.layout.fragment_main_page, container, false);
+                TextView temp = (TextView) rootView.findViewById(R.id.tempVerseNum);
+                temp.setText("Number: " + verseList.size());
+                getActivity().setTitle("Home");
+
+                FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+                if (fab != null) {
+                    fab.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent i = new Intent(getContext(), VersePicker.class);
+                            startActivity(i);
+                        }
+                    });
+                }
+            } else if( getArguments().getInt(ARG_PLANET_NUMBER) == 1 ){
+                if(secondView != null) {
+                    return secondView;
+                } else {
+                    secondView = inflater.inflate(R.layout.fragment_recycler_view, container, false);
+                    RecyclerView rv = (RecyclerView) secondView.findViewById(R.id.rv);
+
+                    LinearLayoutManager llm = new LinearLayoutManager(getContext());
+                    rv.setLayoutManager(llm);
+                    rv.setHasFixedSize(true);
+
+                    VerseAdapter adapter = new VerseAdapter(verseList);
+                    adapter.setContext(getContext());
+                    rv.setAdapter(adapter);
+                    adapter.progressDialog = new ProgressDialog(getContext());
+                    adapter.progressDialog.setMax(100);
+                    adapter.progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    adapter.progressDialog.setMessage("Loading All Verses");
+                    adapter.progressDialog.show();
+                    return secondView;
+                }
+
+
+            } else {
+                rootView = inflater.inflate(R.layout.fragment_planet, container, false);
+                int i = getArguments().getInt(ARG_PLANET_NUMBER);
+                String planet = getResources().getStringArray(R.array.home_nav_bar)[i];
+
+                int imageId = getResources().getIdentifier(planet.toLowerCase(Locale.getDefault()),
+                        "drawable", getActivity().getPackageName());
+                ((ImageView) rootView.findViewById(R.id.image)).setImageResource(imageId);
+                getActivity().setTitle(planet);
+            }
             return rootView;
         }
-    }*/
+    }
 
     /* Called whenever we call invalidateOptionsMenu() */
     @Override
