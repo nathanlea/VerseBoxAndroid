@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -346,6 +347,7 @@ public class MainActivity extends AppCompatActivity {
 
                 rootView = inflater.inflate(R.layout.fragment_main_page, container, false);
                 TextView temp = (TextView) rootView.findViewById(R.id.tempVerseNum);
+                Button button = (Button) rootView.findViewById(R.id.todays_verses_button);
                 temp.setText("Number: " + verseList.size());
                 getActivity().setTitle("Home");
 
@@ -359,6 +361,14 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
                 }
+
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(getContext(), VerseMemory.class);
+                        startActivity(i);
+                    }
+                });
             } else if( getArguments().getInt(ARG_PLANET_NUMBER) == 1 ){
                 if(secondView != null) {
                     return secondView;

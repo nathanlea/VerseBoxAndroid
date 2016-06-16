@@ -26,8 +26,12 @@
             android:label="@string/title_activity_verse_selector"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".VersePicker" />
-        <activity android:name=".VerseOptions" >
-        </activity>
+        <activity android:name=".VerseOptions"></activity>
+        <activity
+            android:name=".VerseMemory"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_verse_memory"
+            android:theme="@style/FullscreenTheme"></activity>
     </application>
 
 </manifest>

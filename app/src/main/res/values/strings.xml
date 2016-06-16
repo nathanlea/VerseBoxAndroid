@@ -7,6 +7,7 @@
     <string name="action_finish">Finish</string>
     <string name="title_activity_verse_selector">VerseSelector</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="today_verses">Today\'s Verses!</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -23,4 +24,8 @@
     </string-array>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+
+    <string name="title_activity_verse_memory">VerseMemory</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

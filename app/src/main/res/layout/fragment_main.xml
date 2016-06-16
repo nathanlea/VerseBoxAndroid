@@ -7,13 +7,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.fibonaccistudios.nathanlea.versebox.MainActivityFragment"
-    tools:showIn="@layout/activity_main">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        android:id="@+id/textView14" />
+    tools:showIn="@layout/fragment_main_page" >
 
     <TextView
         android:layout_width="wrap_content"
@@ -21,7 +15,14 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Large Text"
         android:id="@+id/tempVerseNum"
-        android:layout_below="@+id/textView14"
         android:layout_centerHorizontal="true" />
 
-</RelativeLayout>
+     <Button
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="@string/today_verses"
+         android:id="@+id/todays_verses_button"
+         android:layout_below="@+id/tempVerseNum"
+         android:layout_centerHorizontal="true" />
+
+ </RelativeLayout>
