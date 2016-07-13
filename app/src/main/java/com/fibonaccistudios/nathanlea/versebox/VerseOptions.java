@@ -135,13 +135,13 @@ public class VerseOptions extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         Intent i = new Intent(this, VersePicker.class);
         i.putExtra("bookIndex", bookIndex);
         i.putExtra("chapterNumber", chapterNumber);
         i.putExtra("startVerse", startVerse);
         i.putExtra("endVerse", endVerse);
         setResult(RESULT_CANCELED, i);
+        super.onBackPressed();
     }
 
 

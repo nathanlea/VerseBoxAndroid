@@ -57,6 +57,22 @@ public class VerseCard implements Serializable{
         VerseReference = verse;
     }
 
+    public void buildVerseCardStrings( Context c )
+    {
+        //TODO Make this not have to do this much work every time
+        final Bible bible = new bibleVerseJSON(c).getBible();
+        int tempStart = start_verse+1;
+        int tempEnd = end_verse+1;
+        String verse;
+        if(start_verse == end_verse) {
+            verse = bible.books.get(bookIndex-1).getTitle() + " " + chapter + " : " + tempStart;
+        } else {
+            verse = bible.books.get(bookIndex-1).getTitle() + " " + chapter + " : " + tempStart + " - " + tempEnd;
+        }
+
+        VerseReference = verse;
+    }
+
     public String getStartDate() {
         return startDate;
     }

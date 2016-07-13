@@ -1,163 +1,159 @@
 package com.fibonaccistudios.nathanlea.versebox;
 
-import android.annotation.SuppressLint;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
 public class VerseMemory extends AppCompatActivity {
-    /**
-     * Whether or not the system UI should be auto-hidden after
-     * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
-     */
-    private static final boolean AUTO_HIDE = true;
-
-    /**
-     * If {@link #AUTO_HIDE} is set, the number of milliseconds to wait after
-     * user interaction before hiding the system UI.
-     */
-    private static final int AUTO_HIDE_DELAY_MILLIS = 3000;
-
-    /**
-     * Some older devices needs a small delay between UI widget updates
-     * and a change of the status and navigation bar.
-     */
-    private static final int UI_ANIMATION_DELAY = 300;
-    private final Handler mHideHandler = new Handler();
     private View mContentView;
-    private final Runnable mHidePart2Runnable = new Runnable() {
-        @SuppressLint("InlinedApi")
-        @Override
-        public void run() {
-            // Delayed removal of status and navigation bar
 
-            // Note that some of these constants are new as of API 16 (Jelly Bean)
-            // and API 19 (KitKat). It is safe to use them, as they are inlined
-            // at compile-time and do nothing on earlier devices.
-            mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-        }
-    };
-    private View mControlsView;
-    private final Runnable mShowPart2Runnable = new Runnable() {
-        @Override
-        public void run() {
-            // Delayed display of UI elements
-            ActionBar actionBar = getSupportActionBar();
-            if (actionBar != null) {
-                actionBar.show();
-            }
-            mControlsView.setVisibility(View.VISIBLE);
-        }
-    };
-    private boolean mVisible;
-    private final Runnable mHideRunnable = new Runnable() {
-        @Override
-        public void run() {
-            hide();
-        }
-    };
-    /**
-     * Touch listener to use for in-layout UI controls to delay hiding the
-     * system UI. This is to prevent the jarring behavior of controls going away
-     * while interacting with activity UI.
-     */
-    private final View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            if (AUTO_HIDE) {
-                delayedHide(AUTO_HIDE_DELAY_MILLIS);
-            }
-            return false;
-        }
-    };
+    private int screenIndex = 0;
+    private int verseIndex = 0;
+    private int verseTotal = 0;
+    private boolean infoToReveal[] = {false, true, true, false, false};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        List<VerseCard> totalList = MainActivity.verseList;
+
+        //Somehow look at the dates of the verses and decide which are today verses
+        final List<VerseCard> todaysVerses = totalList; //TODO TEMP
+
+        // TODO Randomize them?
+        Collections.shuffle(todaysVerses);
+        verseTotal = todaysVerses.size();
+
+        //TODO FOR NOW
+        if(verseTotal==0) { finish(); }
 
         setContentView(R.layout.activity_verse_memory);
 
-        mVisible = true;
-        mControlsView = findViewById(R.id.fullscreen_content_controls);
-        mContentView = findViewById(R.id.fullscreen_content);
+        setTitle("Today's Verses");
 
+        mContentView = findViewById(R.id.main_verse_view);
 
-        // Set up the user interaction to manually show or hide the system UI.
-        mContentView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggle();
+        if(screenIndex == 0)
+           blankCard(todaysVerses);
+
+        mContentView.setOnTouchListener(new OnSwipeTouchListener(VerseMemory.this) {
+            public void onSwipeTop() {
+                if(screenIndex!=2) {
+                    ViewGroup parent = (ViewGroup) mContentView.getParent();
+                    int index = parent.indexOfChild(mContentView);
+                    parent.removeView(mContentView);
+                    mContentView = getLayoutInflater().inflate(R.layout.fragment_verse_full, parent, false);
+                    parent.addView(mContentView, index);
+                    mContentView.setOnTouchListener(this);
+                    screenIndex = 2;
+                } else if ( screenIndex == 2) {
+                    //next card
+                    screenIndex = 0;
+                    ViewGroup parent = (ViewGroup) mContentView.getParent();
+                    int index = parent.indexOfChild(mContentView);
+                    parent.removeView(mContentView);
+                    mContentView = getLayoutInflater().inflate(R.layout.fragment_subject, parent, false);
+                    parent.addView(mContentView, index);
+                    mContentView.setOnTouchListener(this);
+                    verseIndex++;
+                    if(verseIndex==verseTotal) {
+                        //done with the list for today!
+                        //popup and head back to home screen
+
+                        finish();
+                    }
+                    blankCard(todaysVerses);
+                }
+            }
+            public void onSwipeRight() {
+                if(screenIndex!=0) {
+                    ViewGroup parent = (ViewGroup) mContentView.getParent();
+                    int index = parent.indexOfChild(mContentView);
+                    parent.removeView(mContentView);
+                    mContentView = getLayoutInflater().inflate(R.layout.fragment_subject, parent, false);
+                    parent.addView(mContentView, index);
+                    mContentView.setOnTouchListener(this);
+                    screenIndex = 0;
+                    blankCard(todaysVerses);
+                }
+            }
+            public void onSwipeLeft() {
+                if(screenIndex!=1) {
+                    ViewGroup parent = (ViewGroup) mContentView.getParent();
+                    int index = parent.indexOfChild(mContentView);
+                    parent.removeView(mContentView);
+                    mContentView = getLayoutInflater().inflate(R.layout.fragment_subject, parent, false);
+                    parent.addView(mContentView, index);
+                    mContentView.setOnTouchListener(this);
+                    screenIndex = 1;
+                    buildCard(todaysVerses);
+                }
             }
         });
-
-        // Upon interacting with UI controls, delay any scheduled hide()
-        // operations to prevent the jarring behavior of controls going away
-        // while interacting with the UI.
-        findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
     }
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
+    private void buildCard(List<VerseCard> v) {
+        View front = mContentView.findViewById(R.id.card_view_front);
+        TextView VR = (TextView) front.findViewById(R.id.verseRefFrag);
+        TextView VS = (TextView) front.findViewById(R.id.sectionFrag);
+        TextView VT = (TextView) front.findViewById(R.id.topicFrag);
+        TextView VSD = (TextView) front.findViewById(R.id.startDateFrag);
+        TextView VED = (TextView) front.findViewById(R.id.endDateFrag);
 
-        // Trigger the initial hide() shortly after the activity has been
-        // created, to briefly hint to the user that UI controls
-        // are available.
-        delayedHide(100);
+        v.get(verseIndex).buildVerseCardStrings(this);
+
+        VR.setText( v.get(verseIndex).getVerseReference());
+        VS.setText( v.get(verseIndex).getSection());
+        VT.setText( v.get(verseIndex).getTopic());
+        VSD.setText(v.get(verseIndex).getStartDate());
+        VED.setText(v.get(verseIndex).getEndDate());
     }
 
-    private void toggle() {
-        if (mVisible) {
-            hide();
-        } else {
-            show();
+    private void blankCard(List<VerseCard> v) {
+        View front = mContentView.findViewById(R.id.card_view_front);
+        TextView VR = (TextView) front.findViewById(R.id.verseRefFrag);
+        TextView VS = (TextView) front.findViewById(R.id.sectionFrag);
+        TextView VT = (TextView) front.findViewById(R.id.topicFrag);
+        TextView VSD = (TextView) front.findViewById(R.id.startDateFrag);
+        TextView VED = (TextView) front.findViewById(R.id.endDateFrag);
+
+        v.get(verseIndex).buildVerseCardStrings(this);
+
+        VR.setText( v.get(verseIndex).getVerseReference());
+        VS.setText( v.get(verseIndex).getSection());
+        VT.setText( v.get(verseIndex).getTopic());
+        VSD.setText(v.get(verseIndex).getStartDate());
+        VED.setText(v.get(verseIndex).getEndDate());
+
+        TextView card[] = {VR, VS, VT, VSD, VED};
+        RevealTouchListener touchListener = new RevealTouchListener();
+
+        for( int i = 0; i < card.length; i++ ) {
+            if(!infoToReveal[i]) {
+                card[i].setTextColor(Color.LTGRAY);
+                card[i].setBackgroundColor(Color.LTGRAY);
+                card[i].setOnTouchListener(touchListener);
+            }
         }
     }
 
-    private void hide() {
-        // Hide UI first
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.hide();
+    class RevealTouchListener implements View.OnTouchListener {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            v.setBackgroundColor(Color.WHITE);
+            ((TextView)v).setTextColor(Color.BLACK);
+            return false;
         }
-        mControlsView.setVisibility(View.GONE);
-        mVisible = false;
-
-        // Schedule a runnable to remove the status and navigation bar after a delay
-        mHideHandler.removeCallbacks(mShowPart2Runnable);
-        mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY);
-    }
-
-    @SuppressLint("InlinedApi")
-    private void show() {
-        // Show the system bar
-        mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
-        mVisible = true;
-
-        // Schedule a runnable to display UI elements after a delay
-        mHideHandler.removeCallbacks(mHidePart2Runnable);
-        mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY);
-    }
-
-    /**
-     * Schedules a call to hide() in [delay] milliseconds, canceling any
-     * previously scheduled calls.
-     */
-    private void delayedHide(int delayMillis) {
-        mHideHandler.removeCallbacks(mHideRunnable);
-        mHideHandler.postDelayed(mHideRunnable, delayMillis);
     }
 }

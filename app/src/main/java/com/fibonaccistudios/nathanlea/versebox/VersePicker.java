@@ -40,7 +40,7 @@ import java.util.Stack;
 
 public class VersePicker extends AppCompatActivity {
     TextView chapter, book, verse, preview;
-    int bookIndex=1, chapterNumber=1, startVerse=1, endVerse=1;
+    int bookIndex=1, chapterNumber=1, startVerse=0, endVerse=0;
 
     View currentView;
     Bible bible;
@@ -250,6 +250,7 @@ public class VersePicker extends AppCompatActivity {
                 dialog.show();
             }
         });
+        updatePreviewBox();
     }
 
     public void setVerseRange(int start, int end) {
