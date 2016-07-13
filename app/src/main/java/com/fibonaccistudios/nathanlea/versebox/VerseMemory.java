@@ -11,6 +11,8 @@ import android.widget.TextView;
 import java.util.Collections;
 import java.util.List;
 
+import me.grantland.widget.AutofitHelper;
+
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
@@ -111,13 +113,16 @@ public class VerseMemory extends AppCompatActivity {
         TextView VSD = (TextView) front.findViewById(R.id.startDateFrag);
         TextView VED = (TextView) front.findViewById(R.id.endDateFrag);
 
-        v.get(verseIndex).buildVerseCardStrings(this);
+        v.get(verseIndex).buildVerseCardStrings();
 
         VR.setText( v.get(verseIndex).getVerseReference());
         VS.setText( v.get(verseIndex).getSection());
         VT.setText( v.get(verseIndex).getTopic());
         VSD.setText(v.get(verseIndex).getStartDate());
         VED.setText(v.get(verseIndex).getEndDate());
+
+        AutofitHelper verseAUTO = AutofitHelper.create(VR);
+        verseAUTO.setMaxLines(1);
     }
 
     private void blankCard(List<VerseCard> v) {
@@ -128,13 +133,16 @@ public class VerseMemory extends AppCompatActivity {
         TextView VSD = (TextView) front.findViewById(R.id.startDateFrag);
         TextView VED = (TextView) front.findViewById(R.id.endDateFrag);
 
-        v.get(verseIndex).buildVerseCardStrings(this);
+        v.get(verseIndex).buildVerseCardStrings();
 
         VR.setText( v.get(verseIndex).getVerseReference());
         VS.setText( v.get(verseIndex).getSection());
         VT.setText( v.get(verseIndex).getTopic());
         VSD.setText(v.get(verseIndex).getStartDate());
         VED.setText(v.get(verseIndex).getEndDate());
+
+        AutofitHelper verseAUTO = AutofitHelper.create(VR);
+        verseAUTO.setMaxLines(1);
 
         TextView card[] = {VR, VS, VT, VSD, VED};
         RevealTouchListener touchListener = new RevealTouchListener();

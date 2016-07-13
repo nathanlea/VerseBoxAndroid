@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground">
+    <ImageView
+        android:id="@+id/overlayImage"
+        android:layout_width="match_parent"
+        android:layout_height="195dp"
+        android:paddingLeft="25dip"
+        android:paddingRight="25dip"
+        android:paddingBottom="40dip"
+        android:paddingTop="10dip"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom">
+
+        <TextView
+            android:id="@+id/cardContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:paddingBottom="5dp"
+            android:paddingLeft="5dp"
+            android:textColor="@color/material_grey_850"
+            android:textSize="@dimen/gird_card_text"
+            android:gravity="center_vertical"
+            android:layout_alignParentTop="true"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+</FrameLayout>

@@ -116,9 +116,6 @@ public class VerseAdapter extends RecyclerView.Adapter<VerseAdapter.VerseViewHol
             vvh = (VerseViewHolder)params[0];
             vc = (List<VerseCard>)params[1];
             i = (Integer) params[2];
-            Context c = (Context) params[3];
-
-            vc.get(i).setAppContext(c);
             vc.get(i).buildVerseCardStrings();
             sb[0] = vc.get(i).getVerseReference();
             sb[1] = vc.get(i).getTopic();

@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,21 +20,14 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.Stack;
 
 public class VersePicker extends AppCompatActivity {
@@ -310,7 +302,7 @@ public class VersePicker extends AppCompatActivity {
                 // fetch data
                 InputStream is = null;
                 try {
-                    URL url = new URL("https://en.bibles.org/v2/chapters/"+MainActivity.bookID.get(bookIndex-1).ID+"."+chapterNumber+"/verses.xml");
+                    URL url = new URL("https://en.bibles.org/v2/chapters/"+ MainActivity.bookID.get(bookIndex-1).ID+"."+chapterNumber+"/verses.xml");
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     String userCredentials = "lv1Ppb478BAoH56OFVNsv2kStGDe11kRy0vFeOFF:X";
                     String basicAuth = "Basic " + new String(Base64.encode(userCredentials.getBytes(), Base64.NO_WRAP));

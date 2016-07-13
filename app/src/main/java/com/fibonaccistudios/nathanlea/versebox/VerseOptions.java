@@ -2,19 +2,16 @@ package com.fibonaccistudios.nathanlea.versebox;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import java.util.Calendar;
 import java.util.List;
@@ -230,7 +227,6 @@ public class VerseOptions extends AppCompatActivity {
                     start_date.getText().toString(), end_date.getText().toString(),
                     preview.getText().toString(), topic.getText().toString(),
                     section.getText().toString());
-            v.setAppContext(this);
             v.buildVerseCardStrings();
             MainActivity.verseList.add(v);
             Verses.saveVerses(this);

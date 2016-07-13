@@ -1,7 +1,5 @@
 package com.fibonaccistudios.nathanlea.versebox;
 
-import android.content.Context;
-
 import java.io.Serializable;
 
 /**
@@ -20,8 +18,6 @@ public class VerseCard implements Serializable{
 
     private transient String VerseReference = null;
 
-    private transient Context c = null;
-
     public VerseCard(int bookIndex, int chapter, int start_verse, int end_verse,
                      String startDate, String endDate, String verseStr,
                      String topic, String section)
@@ -37,30 +33,10 @@ public class VerseCard implements Serializable{
         this.verseStr = verseStr;
     }
 
-    public void setAppContext( Context context ) {
-        this.c = context;
-    }
-
     public void buildVerseCardStrings( )
     {
         //TODO Make this not have to do this much work every time
-        final Bible bible = new bibleVerseJSON(c).getBible();
-        int tempStart = start_verse+1;
-        int tempEnd = end_verse+1;
-        String verse;
-        if(start_verse == end_verse) {
-            verse = bible.books.get(bookIndex-1).getTitle() + " " + chapter + " : " + tempStart;
-        } else {
-            verse = bible.books.get(bookIndex-1).getTitle() + " " + chapter + " : " + tempStart + " - " + tempEnd;
-        }
-
-        VerseReference = verse;
-    }
-
-    public void buildVerseCardStrings( Context c )
-    {
-        //TODO Make this not have to do this much work every time
-        final Bible bible = new bibleVerseJSON(c).getBible();
+        final Bible bible = MainActivity.bible;
         int tempStart = start_verse+1;
         int tempEnd = end_verse+1;
         String verse;

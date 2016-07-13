@@ -15,7 +15,7 @@ import java.io.InputStreamReader;
  */
 public class bibleVerseJSON {
 
-    private Bible bible;
+    public Bible bible;
 
     public bibleVerseJSON( Context c ) {
         BufferedReader reader = null;

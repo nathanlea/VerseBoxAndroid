@@ -13,8 +13,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,12 +25,12 @@
             android:label="@string/title_activity_verse_selector"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".VersePicker" />
-        <activity android:name=".VerseOptions"></activity>
+        <activity android:name=".VerseOptions" />
         <activity
             android:name=".VerseMemory"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_verse_memory"
-            android:theme="@style/FullscreenTheme"></activity>
+            android:theme="@style/FullscreenTheme" />
     </application>
 
 </manifest>
