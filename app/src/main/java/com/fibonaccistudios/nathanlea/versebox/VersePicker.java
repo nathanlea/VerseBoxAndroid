@@ -1,5 +1,6 @@
 package com.fibonaccistudios.nathanlea.versebox;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -30,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-public class VersePicker extends AppCompatActivity {
+public class VersePicker extends Activity {
     TextView chapter, book, verse, preview;
     int bookIndex=1, chapterNumber=1, startVerse=0, endVerse=0;
 

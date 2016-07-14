@@ -1,11 +1,18 @@
 package com.fibonaccistudios.nathanlea.versebox;
 
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import java.util.Collections;
@@ -17,7 +24,7 @@ import me.grantland.widget.AutofitHelper;
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class VerseMemory extends AppCompatActivity {
+public class VerseMemory extends Activity {
     private View mContentView;
 
     private int screenIndex = 0;
@@ -28,6 +35,9 @@ public class VerseMemory extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_verse_memory);
+
         List<VerseCard> totalList = MainActivity.verseList;
 
         //Somehow look at the dates of the verses and decide which are today verses
@@ -39,8 +49,6 @@ public class VerseMemory extends AppCompatActivity {
 
         //TODO FOR NOW
         if(verseTotal==0) { finish(); }
-
-        setContentView(R.layout.activity_verse_memory);
 
         setTitle("Today's Verses");
 
@@ -80,26 +88,89 @@ public class VerseMemory extends AppCompatActivity {
             }
             public void onSwipeRight() {
                 if(screenIndex!=0) {
-                    ViewGroup parent = (ViewGroup) mContentView.getParent();
+                    final ViewGroup parent = (ViewGroup) mContentView.getParent();
                     int index = parent.indexOfChild(mContentView);
-                    parent.removeView(mContentView);
+                    PlayAnim(R.id.card_view_front, getBaseContext(), R.animator.card_flip_left_out_back);
+                    //parent.removeView(mContentView);
+                    final View temp = mContentView;
                     mContentView = getLayoutInflater().inflate(R.layout.fragment_subject, parent, false);
                     parent.addView(mContentView, index);
+                    PlayAnim(R.id.card_view_front, getBaseContext(), R.animator.card_flip_left_in_back);
                     mContentView.setOnTouchListener(this);
                     screenIndex = 0;
                     blankCard(todaysVerses);
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Do something after 100ms
+                            parent.removeView(temp);
+                        }
+                    }, 250);
+                } else if (screenIndex == 0) {
+                    final ViewGroup parent = (ViewGroup) mContentView.getParent();
+                    int index = parent.indexOfChild(mContentView);
+                    PlayAnim(R.id.card_view_front, getBaseContext(), R.animator.card_flip_left_out_back);
+                    final View temp = mContentView;
+                    //parent.removeView(mContentView);
+                    mContentView = getLayoutInflater().inflate(R.layout.fragment_subject, parent, false);
+                    parent.addView(mContentView, index);
+                    PlayAnim(R.id.card_view_front, getBaseContext(), R.animator.card_flip_left_in_back);
+                    mContentView.setOnTouchListener(this);
+                    screenIndex = 1;
+                    buildCard(todaysVerses);
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Do something after 100ms
+                            parent.removeView(temp);
+                        }
+                    }, 250);
                 }
             }
             public void onSwipeLeft() {
                 if(screenIndex!=1) {
-                    ViewGroup parent = (ViewGroup) mContentView.getParent();
+                    final ViewGroup parent = (ViewGroup) mContentView.getParent();
                     int index = parent.indexOfChild(mContentView);
-                    parent.removeView(mContentView);
+                    PlayAnim(R.id.card_view_front, getBaseContext(), R.animator.card_flip_left_out);
+                    final View temp = mContentView;
+                    //parent.removeView(mContentView);
                     mContentView = getLayoutInflater().inflate(R.layout.fragment_subject, parent, false);
                     parent.addView(mContentView, index);
+                    PlayAnim(R.id.card_view_front, getBaseContext(), R.animator.card_flip_left_in);
                     mContentView.setOnTouchListener(this);
                     screenIndex = 1;
                     buildCard(todaysVerses);
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Do something after 100ms
+                            parent.removeView(temp);
+                        }
+                    }, 250);
+
+                } else if( screenIndex == 1 ) {
+                    final ViewGroup parent = (ViewGroup) mContentView.getParent();
+                    int index = parent.indexOfChild(mContentView);
+                    PlayAnim(R.id.card_view_front, getBaseContext(), R.animator.card_flip_left_out);
+                    final View temp = mContentView;
+                    //parent.removeView(mContentView);
+                    mContentView = getLayoutInflater().inflate(R.layout.fragment_subject, parent, false);
+                    parent.addView(mContentView, index);
+                    PlayAnim(R.id.card_view_front, getBaseContext(), R.animator.card_flip_left_in);
+                    mContentView.setOnTouchListener(this);
+                    screenIndex = 0;
+                    blankCard(todaysVerses);
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Do something after 100ms
+                            parent.removeView(temp);
+                        }
+                    }, 250);
                 }
             }
         });
@@ -155,6 +226,19 @@ public class VerseMemory extends AppCompatActivity {
             }
         }
     }
+
+    public void PlayAnim(int viewid, Context Con, int animationid )
+    {
+        View v = findViewById(viewid);
+
+        if( v != null )
+        {
+            AnimatorSet animation = (AnimatorSet) AnimatorInflater.loadAnimator(Con, animationid  );
+            animation.setTarget(v);
+            animation.start();
+        }
+    }
+
 
     class RevealTouchListener implements View.OnTouchListener {
         @Override

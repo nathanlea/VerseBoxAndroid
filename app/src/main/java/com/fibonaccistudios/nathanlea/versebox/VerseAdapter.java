@@ -1,6 +1,5 @@
 package com.fibonaccistudios.nathanlea.versebox;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.widget.CardView;
@@ -72,7 +71,6 @@ public class VerseAdapter extends RecyclerView.Adapter<VerseAdapter.VerseViewHol
 
     List<VerseCard> verseCards;
     Context c;
-    ProgressDialog progressDialog;
 
     VerseAdapter(List<VerseCard> verseCards){
         this.verseCards = verseCards;
@@ -133,9 +131,6 @@ public class VerseAdapter extends RecyclerView.Adapter<VerseAdapter.VerseViewHol
             vvh.section.setText(sb[2]);
             vvh.sDate.setText(sb[3]);
             vvh.eDate.setText(sb[4]);
-            if(i+1 == getItemCount()) {
-                progressDialog.cancel();
-            }
         }
     }
 }

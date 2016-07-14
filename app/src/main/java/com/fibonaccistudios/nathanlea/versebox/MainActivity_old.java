@@ -385,11 +385,11 @@ public class MainActivity_old extends AppCompatActivity {
                     VerseAdapter adapter = new VerseAdapter(verseList);
                     adapter.setContext(getContext());
                     rv.setAdapter(adapter);
-                    adapter.progressDialog = new ProgressDialog(getContext());
+                   /* adapter.progressDialog = new ProgressDialog(getContext());
                     adapter.progressDialog.setMax(100);
                     adapter.progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                     adapter.progressDialog.setMessage("Loading All Verses");
-                    adapter.progressDialog.show();
+                    adapter.progressDialog.show();*/
                     return secondView;
                 }
             } else {
