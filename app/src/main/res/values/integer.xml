@@ -2,4 +2,7 @@
 <resources>
     <integer name="card_flip_time_full">500</integer>
     <integer name="card_flip_time_half">200</integer>
+    <integer name="card_scroll_time">700</integer>
+    <integer name="card_scroll_time_half">350</integer>
+    <integer name="card_scroll_time_half_half">150</integer>
 </resources>

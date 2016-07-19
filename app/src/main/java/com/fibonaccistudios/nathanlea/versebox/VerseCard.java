@@ -70,6 +70,8 @@ public class VerseCard implements Serializable{
     }
 
     public String getVerseReference() {
+        if(VerseReference==null)
+            buildVerseCardStrings();
         return VerseReference;
     }
 }

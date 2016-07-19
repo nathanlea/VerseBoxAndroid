@@ -2,9 +2,12 @@ package com.fibonaccistudios.nathanlea.versebox;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
@@ -30,7 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     static List<BooksIDXMLParser.Book> bookID;
     static Map<String, List<BibleXMLParser.Entry>> GloablBibleMap;
@@ -98,6 +101,11 @@ public class MainActivity extends Activity {
 
         bible = new bibleVerseJSON(this).getBible();
 
+    }
+
+    protected void onStop() {
+        super.onStop();
+        Verses.saveVerses(this);
     }
 
     protected void onResume() {

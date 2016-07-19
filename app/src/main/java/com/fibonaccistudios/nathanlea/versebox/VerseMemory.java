@@ -59,32 +59,37 @@ public class VerseMemory extends Activity {
 
         mContentView.setOnTouchListener(new OnSwipeTouchListener(VerseMemory.this) {
             public void onSwipeTop() {
-                if(screenIndex!=2) {
-                    ViewGroup parent = (ViewGroup) mContentView.getParent();
-                    int index = parent.indexOfChild(mContentView);
-                    parent.removeView(mContentView);
-                    mContentView = getLayoutInflater().inflate(R.layout.fragment_verse_full, parent, false);
-                    parent.addView(mContentView, index);
-                    mContentView.setOnTouchListener(this);
-                    screenIndex = 2;
-                } else if ( screenIndex == 2) {
-                    //next card
-                    screenIndex = 0;
-                    ViewGroup parent = (ViewGroup) mContentView.getParent();
-                    int index = parent.indexOfChild(mContentView);
-                    parent.removeView(mContentView);
-                    mContentView = getLayoutInflater().inflate(R.layout.fragment_subject, parent, false);
-                    parent.addView(mContentView, index);
-                    mContentView.setOnTouchListener(this);
-                    verseIndex++;
-                    if(verseIndex==verseTotal) {
-                        //done with the list for today!
-                        //popup and head back to home screen
+                //next card
 
-                        finish();
-                    }
-                    blankCard(todaysVerses);
+                final ViewGroup parent = (ViewGroup) mContentView.getParent();
+                int index = parent.indexOfChild(mContentView);
+                if(screenIndex == 0)
+                    PlayAnim(R.id.card_view_front, getBaseContext(), R.animator.card_scroll_up_top);
+                else if (screenIndex == 1)
+                    PlayAnim(R.id.card_view_back, getBaseContext(), R.animator.card_scroll_up_top);
+                //parent.removeView(mContentView);
+                final View temp = mContentView;
+                mContentView = getLayoutInflater().inflate(R.layout.fragment_subject, parent, false);
+                parent.addView(mContentView, index);
+                PlayAnim(R.id.card_view_front, getBaseContext(), R.animator.card_scroll_up_bottom);
+                mContentView.setOnTouchListener(this);
+                verseIndex++;
+                if(verseIndex==verseTotal) {
+                    //done with the list for today!
+                    //popup and head back to home screen
+
+                    finish();
                 }
+                screenIndex = 0;
+                blankCard(todaysVerses);
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //Do something after 100ms
+                        parent.removeView(temp);
+                    }
+                }, 500);
             }
             public void onSwipeRight() {
                 if(screenIndex!=0) {
@@ -113,12 +118,12 @@ public class VerseMemory extends Activity {
                     PlayAnim(R.id.card_view_front, getBaseContext(), R.animator.card_flip_left_out_back);
                     final View temp = mContentView;
                     //parent.removeView(mContentView);
-                    mContentView = getLayoutInflater().inflate(R.layout.fragment_subject, parent, false);
+                    mContentView = getLayoutInflater().inflate(R.layout.fragment_verse_full, parent, false);
                     parent.addView(mContentView, index);
-                    PlayAnim(R.id.card_view_front, getBaseContext(), R.animator.card_flip_left_in_back);
+                    PlayAnim(R.id.card_view_back, getBaseContext(), R.animator.card_flip_left_in_back);
                     mContentView.setOnTouchListener(this);
                     screenIndex = 1;
-                    buildCard(todaysVerses);
+                    //buildCard(todaysVerses);
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -136,12 +141,12 @@ public class VerseMemory extends Activity {
                     PlayAnim(R.id.card_view_front, getBaseContext(), R.animator.card_flip_left_out);
                     final View temp = mContentView;
                     //parent.removeView(mContentView);
-                    mContentView = getLayoutInflater().inflate(R.layout.fragment_subject, parent, false);
+                    mContentView = getLayoutInflater().inflate(R.layout.fragment_verse_full, parent, false);
                     parent.addView(mContentView, index);
-                    PlayAnim(R.id.card_view_front, getBaseContext(), R.animator.card_flip_left_in);
+                    PlayAnim(R.id.card_view_back, getBaseContext(), R.animator.card_flip_left_in);
                     mContentView.setOnTouchListener(this);
                     screenIndex = 1;
-                    buildCard(todaysVerses);
+                    //buildCard(todaysVerses);
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -150,7 +155,6 @@ public class VerseMemory extends Activity {
                             parent.removeView(temp);
                         }
                     }, 250);
-
                 } else if( screenIndex == 1 ) {
                     final ViewGroup parent = (ViewGroup) mContentView.getParent();
                     int index = parent.indexOfChild(mContentView);

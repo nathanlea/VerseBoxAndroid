@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-public class VersePicker extends Activity {
+public class VersePicker extends AppCompatActivity {
     TextView chapter, book, verse, preview;
     int bookIndex=1, chapterNumber=1, startVerse=0, endVerse=0;
 
@@ -56,7 +56,7 @@ public class VersePicker extends Activity {
         book.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Dialog dialog = new Dialog(c, R.style.MaterialDialog);
+                final Dialog dialog = new Dialog(c, R.style.AppTheme);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.fragment_books);
 
@@ -95,7 +95,7 @@ public class VersePicker extends Activity {
             @Override
             public void onClick(View v) {
                 // custom dialog
-                final Dialog dialog = new Dialog(c, R.style.MaterialDialog);
+                final Dialog dialog = new Dialog(c, R.style.AppTheme);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.fragment_chapter);
 
@@ -152,7 +152,7 @@ public class VersePicker extends Activity {
             @Override
             public void onClick(View v) {
                 // custom dialog
-                final Dialog dialog = new Dialog(c, R.style.MaterialDialog);
+                final Dialog dialog = new Dialog(c, R.style.AppTheme);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.fragment_verse);
 

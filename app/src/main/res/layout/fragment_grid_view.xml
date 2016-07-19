@@ -1,0 +1,17 @@
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    card_view:cardUseCompatPadding="true">
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:text="New Text"
+    android:id="@+id/gridViewTV"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:textColor="#000"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:textSize="80dp" />
+    </android.support.v7.widget.CardView>
+    <!-- android:background="@drawable/text_view_background_selector" -->

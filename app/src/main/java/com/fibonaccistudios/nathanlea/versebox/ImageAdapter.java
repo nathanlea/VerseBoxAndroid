@@ -83,12 +83,12 @@ public class ImageAdapter extends BaseAdapter {
                         mContext.startActivity(i);
                         break;
                     case 4:
-                        //i = new Intent(mContext, MainActivity.class);
-                        //mContext.startActivity(i);
+                        i = new Intent(mContext, Topic.class);
+                        mContext.startActivity(i);
                         break;
                     case 5:
-                        //i = new Intent(mContext, MainActivity.class);
-                        //mContext.startActivity(i);
+                        i = new Intent(mContext, Section.class);
+                        mContext.startActivity(i);
                         break;
                 }
 
