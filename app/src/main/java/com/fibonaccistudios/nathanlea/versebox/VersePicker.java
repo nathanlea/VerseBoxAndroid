@@ -49,6 +49,8 @@ public class VersePicker extends AppCompatActivity {
         this.bible = bible;
         final Context c = this;
 
+        setTitle("Select Verse");
+
         preview = (TextView) findViewById(R.id.textView8);
 
         book = (TextView) findViewById(R.id.textView2);
@@ -425,6 +427,8 @@ public class VersePicker extends AppCompatActivity {
             i.putExtra("chapterNumber", chapterNumber);
             i.putExtra("startVerse", startVerse);
             i.putExtra("endVerse", endVerse);
+            i.putExtra("editing", false);
+
             startActivityForResult(i, RESULT_CANCELED);
             return true;
         }

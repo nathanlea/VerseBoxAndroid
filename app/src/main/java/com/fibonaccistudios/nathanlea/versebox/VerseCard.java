@@ -15,6 +15,7 @@ public class VerseCard implements Serializable{
     private String topic = null;
     private String section = null;
     private String verseStr = null;
+    private boolean loved = false;
 
     private transient String VerseReference = null;
 
@@ -33,6 +34,17 @@ public class VerseCard implements Serializable{
         this.verseStr = verseStr;
     }
 
+    public void rebuildVerseCard (String startDate, String endDate,
+                                  String verseRef, String verseStr,
+                                  String topic, String section) {
+        this.startDate = startDate;
+        this.endDate  = endDate;
+        this.topic = topic;
+        this.section = section;
+        this.verseStr = verseStr;
+        this.VerseReference = verseRef;
+    }
+
     public void buildVerseCardStrings( )
     {
         //TODO Make this not have to do this much work every time
@@ -48,6 +60,11 @@ public class VerseCard implements Serializable{
 
         VerseReference = verse;
     }
+
+    public int getBookIndex() {return bookIndex;}
+    public int getStartVerse() {return start_verse;}
+    public int getEndVerse() {return end_verse;}
+    public int getChapter() { return chapter;}
 
     public String getStartDate() {
         return startDate;
@@ -73,5 +90,12 @@ public class VerseCard implements Serializable{
         if(VerseReference==null)
             buildVerseCardStrings();
         return VerseReference;
+    }
+
+    public void setLoved(boolean loved) {
+        this.loved = loved;
+    }
+    public boolean isLoved() {
+        return loved;
     }
 }

@@ -1,16 +1,17 @@
 package com.fibonaccistudios.nathanlea.versebox;
 
-import android.net.Uri;
+import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
 
 import co.dift.ui.SwipeToAction;
-import com.facebook.drawee.view.SimpleDraweeView;
 
 /**
  * Created by Nathan on 7/18/2016.
@@ -24,14 +25,14 @@ public class AllVerseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public class AllVerseHolder extends SwipeToAction.ViewHolder<VerseCard> {
         public TextView titleView;
         public TextView authorView;
-        public SimpleDraweeView imageView;
+        public ImageView imageView;
 
         public AllVerseHolder(View v) {
             super(v);
 
             titleView = (TextView) v.findViewById(R.id.title);
             authorView = (TextView) v.findViewById(R.id.author);
-            imageView = (SimpleDraweeView) v.findViewById(R.id.image);
+            imageView = (ImageView) v.findViewById(R.id.image);
         }
     }
 
@@ -65,5 +66,12 @@ public class AllVerseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         vh.titleView.setText(item.getVerseReference());
         vh.authorView.setText(item.getVerseStr().substring(0,45)+"...");
         vh.data = item;
+        if(item.isLoved()) {
+            vh.imageView.setImageResource(R.mipmap.bookheart);
+            vh.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        } else {
+            vh.imageView.setImageResource(R.mipmap.ic_book_black_24dp);
+            vh.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        }
     }
 }

@@ -4,9 +4,12 @@ import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,7 +27,7 @@ import me.grantland.widget.AutofitHelper;
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class VerseMemory extends Activity {
+public class VerseMemory extends AppCompatActivity {
     private View mContentView;
 
     private int screenIndex = 0;
@@ -123,7 +126,7 @@ public class VerseMemory extends Activity {
                     PlayAnim(R.id.card_view_back, getBaseContext(), R.animator.card_flip_left_in_back);
                     mContentView.setOnTouchListener(this);
                     screenIndex = 1;
-                    //buildCard(todaysVerses);
+                    backCard(todaysVerses);
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -146,7 +149,7 @@ public class VerseMemory extends Activity {
                     PlayAnim(R.id.card_view_back, getBaseContext(), R.animator.card_flip_left_in);
                     mContentView.setOnTouchListener(this);
                     screenIndex = 1;
-                    //buildCard(todaysVerses);
+                    backCard(todaysVerses);
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -229,6 +232,17 @@ public class VerseMemory extends Activity {
                 card[i].setOnTouchListener(touchListener);
             }
         }
+    }
+
+    private void backCard(List<VerseCard> v) {
+
+        View front = mContentView.findViewById(R.id.card_view_back);
+        TextView preview = (TextView) front.findViewById(R.id.verse_preview_frag);
+
+        preview.setText( v.get(verseIndex).getVerseStr());
+
+        AutofitHelper verseAUTO = AutofitHelper.create(preview);
+        verseAUTO.setMaxLines(8);
     }
 
     public void PlayAnim(int viewid, Context Con, int animationid )

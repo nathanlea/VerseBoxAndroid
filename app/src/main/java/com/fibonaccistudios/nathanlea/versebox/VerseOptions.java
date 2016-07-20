@@ -28,6 +28,15 @@ public class VerseOptions extends AppCompatActivity {
     TextView start_date = null;
     TextView end_date = null;
 
+    String verseREF_s  = null;
+    String verseSTR_s  = null;
+    String topic_s     = null;
+    String section_s   = null;
+    String startdate_s = null;
+    String endDate_s   = null;
+    boolean editingVerse = false;
+    int position = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +46,19 @@ public class VerseOptions extends AppCompatActivity {
         chapterNumber = (int)getIntent().getExtras().get("chapterNumber");
         startVerse = (int)getIntent().getExtras().get("startVerse");
         endVerse = (int)getIntent().getExtras().get("endVerse");
+        setTitle("Finalize Verse Card");
+
+        editingVerse = (boolean)getIntent().getExtras().get("editing");
+        if(editingVerse) {
+            verseREF_s  = (String)getIntent().getExtras().get("verseREF");
+            verseSTR_s  = (String)getIntent().getExtras().get("preview");
+            topic_s     = (String)getIntent().getExtras().get("topic");
+            section_s   = (String)getIntent().getExtras().get("section");
+            startdate_s = (String)getIntent().getExtras().get("startdate");
+            endDate_s   = (String)getIntent().getExtras().get("enddate");
+            position = (int)getIntent().getExtras().get("position");
+            setTitle("Edit Verse Card");
+        }
 
         verseREF = (TextView) findViewById(R.id.verseRef_TV);
         start_date = (TextView) findViewById(R.id.startDate_TV);
@@ -49,78 +71,85 @@ public class VerseOptions extends AppCompatActivity {
 
         AutofitHelper verseAUTO = AutofitHelper.create(verseREF);
         verseAUTO.setMaxLines(1);
-
-        //TODO Make this not have to do this much work every time
-        final Bible bible = new bibleVerseJSON(getApplicationContext()).getBible();
-        int tempStart = startVerse+1;
-        int tempEnd = endVerse+1;
-        String verse;
-        if(startVerse == endVerse) {
-            verse = bible.books.get(bookIndex-1).getTitle() + " " + chapterNumber + " : " + tempStart;
-        } else {
-            verse = bible.books.get(bookIndex-1).getTitle() + " " + chapterNumber + " : " + tempStart + " - " + tempEnd;
-        }
-
-        if(verseREF!=null)
-            verseREF.setText(verse);
-
-        List<BibleXMLParser.Entry> entry = MainActivity.GloablBibleMap.get(MainActivity.bookID.get(bookIndex - 1).ID + "." + chapterNumber);
-        if (entry != null && preview != null) {
-            StringBuilder sb = new StringBuilder();
-            for (int i = startVerse; i <= endVerse; i++) {
-                sb.append(entry.get(i).text);
-                sb.append(" ");
-            }
-            preview.setText(sb.toString());
-        }
-
-        final Calendar c = Calendar.getInstance();
-        int year, month, day;
-        year = c.get(Calendar.YEAR);
-        month = c.get(Calendar.MONTH) + 1;
-        day = c.get(Calendar.DATE);
-        if(start_date != null && end_date != null) {
-            start_date.setText(month+"/"+day+"/"+year);
-            if( month==11 ) {
-                month = 1;
-            } else if( month == 12 ) {
-                month = 2;
-                if(VerseBoxCal.isLeapYear(year) && day > 29) {
-                    day = 29;
-                } else {
-                    day = 28;
-                }
+        if(!editingVerse) {
+            //TODO Make this not have to do this much work every time
+            final Bible bible = new bibleVerseJSON(getApplicationContext()).getBible();
+            int tempStart = startVerse + 1;
+            int tempEnd = endVerse + 1;
+            String verse;
+            if (startVerse == endVerse) {
+                verse = bible.books.get(bookIndex - 1).getTitle() + " " + chapterNumber + " : " + tempStart;
             } else {
-                month+=2;
+                verse = bible.books.get(bookIndex - 1).getTitle() + " " + chapterNumber + " : " + tempStart + " - " + tempEnd;
             }
-            end_date.setText(month+"/"+day+"/"+year);
 
-            start_date.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String date = start_date.getText().toString();
-                    String[] parts = date.split("/");
-                    int month = Integer.parseInt(parts[0]);
-                    int day = Integer.parseInt(parts[1]);
-                    int year = Integer.parseInt(parts[2]);
-                    showTimePickerDialog(v, start_date, end_date, 0, day, month-1, year);
-                }
-            });
+            if (verseREF != null)
+                verseREF.setText(verse);
 
-            end_date.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String date = end_date.getText().toString();
-                    String[] parts = date.split("/");
-                    int month = Integer.parseInt(parts[0]);
-                    int day = Integer.parseInt(parts[1]);
-                    int year = Integer.parseInt(parts[2]);
-                    showTimePickerDialog(v, start_date, end_date, 1, day, month-1, year);
+            List<BibleXMLParser.Entry> entry = MainActivity.GloablBibleMap.get(MainActivity.bookID.get(bookIndex - 1).ID + "." + chapterNumber);
+            if (entry != null && preview != null) {
+                StringBuilder sb = new StringBuilder();
+                for (int i = startVerse; i <= endVerse; i++) {
+                    sb.append(entry.get(i).text);
+                    sb.append(" ");
                 }
-            });
+                preview.setText(sb.toString());
+            }
+
+            final Calendar c = Calendar.getInstance();
+            int year, month, day;
+            year = c.get(Calendar.YEAR);
+            month = c.get(Calendar.MONTH) + 1;
+            day = c.get(Calendar.DATE);
+            if (start_date != null && end_date != null) {
+                start_date.setText(month + "/" + day + "/" + year);
+                if (month == 11) {
+                    month = 1;
+                } else if (month == 12) {
+                    month = 2;
+                    if (VerseBoxCal.isLeapYear(year) && day > 29) {
+                        day = 29;
+                    } else {
+                        day = 28;
+                    }
+                } else {
+                    month += 2;
+                }
+                end_date.setText(month + "/" + day + "/" + year);
+            }
+        } else {
+
+            verseREF.setText(verseREF_s);
+            preview.setText(verseSTR_s);
+            topic.setText(topic_s);
+            section.setText(section_s);
+            start_date.setText(startdate_s);
+            end_date.setText(endDate_s);
+
         }
+        start_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String date = start_date.getText().toString();
+                String[] parts = date.split("/");
+                int month = Integer.parseInt(parts[0]);
+                int day = Integer.parseInt(parts[1]);
+                int year = Integer.parseInt(parts[2]);
+                showTimePickerDialog(v, start_date, end_date, 0, day, month - 1, year);
+            }
+        });
 
-
+        end_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String date = end_date.getText().toString();
+                String[] parts = date.split("/");
+                int month = Integer.parseInt(parts[0]);
+                int day = Integer.parseInt(parts[1]);
+                int year = Integer.parseInt(parts[2]);
+                showTimePickerDialog(v, start_date, end_date, 1, day, month - 1, year);
+            }
+        });
     }
 
     public void showTimePickerDialog(View v, TextView tv, TextView tv2, int option, int day, int month, int year) {
@@ -132,12 +161,17 @@ public class VerseOptions extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent i = new Intent(this, VersePicker.class);
-        i.putExtra("bookIndex", bookIndex);
-        i.putExtra("chapterNumber", chapterNumber);
-        i.putExtra("startVerse", startVerse);
-        i.putExtra("endVerse", endVerse);
-        setResult(RESULT_CANCELED, i);
+        if(!editingVerse) {
+            Intent i = new Intent(this, VersePicker.class);
+            i.putExtra("bookIndex", bookIndex);
+            i.putExtra("chapterNumber", chapterNumber);
+            i.putExtra("startVerse", startVerse);
+            i.putExtra("endVerse", endVerse);
+            setResult(RESULT_CANCELED, i);
+        } else {
+            Intent i = new Intent(this, allVerse.class);
+            setResult(RESULT_CANCELED, i);
+        }
         super.onBackPressed();
     }
 
@@ -222,17 +256,38 @@ public class VerseOptions extends AppCompatActivity {
             //public VerseCard(int bookIndex, int chapter, int start_verse, int end_verse,
             // String startDate, String endDate,
             // String topic, String section)
+            if(!editingVerse) {
+                VerseCard v = new VerseCard(bookIndex, chapterNumber, startVerse, endVerse,
+                        start_date.getText().toString(), end_date.getText().toString(),
+                        preview.getText().toString(), topic.getText().toString(),
+                        section.getText().toString());
+                v.buildVerseCardStrings();
+                MainActivity.verseList.add(v);
+                Verses.saveVerses(this);
+                setResult(RESULT_OK);
+                finish();
+            } else {
+                Intent i = new Intent(this, allVerse.class);
+                VerseCard vc = MainActivity.verseList.get(position);
+                MainActivity.verseList.remove(position);
+                vc.rebuildVerseCard(
+                        start_date.getText().toString(),
+                        end_date.getText().toString(),
+                        verseREF.getText().toString(),
+                        preview.getText().toString(),
+                        topic.getText().toString(),
+                        section.getText().toString());
+                MainActivity.verseList.add(position, vc);
 
-            VerseCard v = new VerseCard(bookIndex, chapterNumber, startVerse, endVerse,
-                    start_date.getText().toString(), end_date.getText().toString(),
-                    preview.getText().toString(), topic.getText().toString(),
-                    section.getText().toString());
-            v.buildVerseCardStrings();
-            MainActivity.verseList.add(v);
-            Verses.saveVerses(this);
+                Verses.saveVerses(getBaseContext());
 
-            setResult(RESULT_OK);
-            finish();
+                setResult(RESULT_OK, i);
+                //onBackPressed();
+                finish();
+            }
+
+            //setResult(RESULT_OK);
+            //finish();
 
             //save Verse to folder
 
