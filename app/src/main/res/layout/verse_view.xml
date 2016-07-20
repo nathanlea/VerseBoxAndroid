@@ -65,12 +65,22 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/author"
+            android:id="@+id/preview"
             android:layout_below="@+id/title"
             android:layout_alignLeft="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/list"
+            android:layout_toEndOf="@+id/title"
+            android:layout_alignTop="@+id/title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14dp"
+            android:gravity="right" />
+
     </RelativeLayout>
 
     <!-- just a divider -->

@@ -1,11 +1,9 @@
 package com.fibonaccistudios.nathanlea.versebox;
 
-import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,14 +22,16 @@ public class AllVerseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     /** References to the views for each data item **/
     public class AllVerseHolder extends SwipeToAction.ViewHolder<VerseCard> {
         public TextView titleView;
-        public TextView authorView;
+        public TextView versePreView;
+        public TextView listView;
         public ImageView imageView;
 
         public AllVerseHolder(View v) {
             super(v);
 
             titleView = (TextView) v.findViewById(R.id.title);
-            authorView = (TextView) v.findViewById(R.id.author);
+            versePreView = (TextView) v.findViewById(R.id.preview);
+            listView = (TextView) v.findViewById(R.id.list);
             imageView = (ImageView) v.findViewById(R.id.image);
         }
     }
@@ -64,7 +64,7 @@ public class AllVerseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         VerseCard item = items.get(position);
         AllVerseHolder vh = (AllVerseHolder) holder;
         vh.titleView.setText(item.getVerseReference());
-        vh.authorView.setText(item.getVerseStr().substring(0,45)+"...");
+        vh.versePreView.setText(item.getVerseStr().substring(0,45)+"...");
         vh.data = item;
         if(item.isLoved()) {
             vh.imageView.setImageResource(R.mipmap.bookheart);
@@ -73,5 +73,23 @@ public class AllVerseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             vh.imageView.setImageResource(R.mipmap.ic_book_black_24dp);
             vh.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         }
+        String listText = "";
+        switch (item.getList()) {
+            case 0:
+                listText = "Daily";
+                break;
+            case 1:
+                listText = "Odd/Even";
+                break;
+            case 2:
+                listText = "Week";
+                break;
+            case 3:
+                listText = "Month";
+                break;
+            default:
+                break;
+        }
+        vh.listView.setText(listText);
     }
 }

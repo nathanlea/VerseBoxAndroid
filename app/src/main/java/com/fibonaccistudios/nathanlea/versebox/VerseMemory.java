@@ -5,19 +5,25 @@ import android.animation.AnimatorSet;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,6 +40,7 @@ public class VerseMemory extends AppCompatActivity {
     private int verseIndex = 0;
     private int verseTotal = 0;
     private boolean infoToReveal[] = {false, true, true, false, false};
+    private List<VerseCard> totalList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,17 +48,34 @@ public class VerseMemory extends AppCompatActivity {
 
         setContentView(R.layout.activity_verse_memory);
 
-        List<VerseCard> totalList = MainActivity.verseList;
+        totalList = MainActivity.verseList;
 
-        //Somehow look at the dates of the verses and decide which are today verses
-        final List<VerseCard> todaysVerses = totalList; //TODO TEMP
+        final List<VerseCard> todaysVerses = new ArrayList<>();
 
-        // TODO Randomize them?
+        final Calendar c = Calendar.getInstance();
+
+        for(int i = 0; i < totalList.size(); i++) {
+            int l = totalList.get(i).getList();
+            if (l == 0) {
+                todaysVerses.add(totalList.get(i));
+            } else if (l == 1) {
+                if (c.get(Calendar.DATE) % 2 == totalList.get(i).getLevelInList()) {
+                    todaysVerses.add(totalList.get(i));
+                }
+            } else if (l == 2) {
+                if (c.get(Calendar.DAY_OF_WEEK) == totalList.get(i).getLevelInList()) {
+                    todaysVerses.add(totalList.get(i));
+                }
+            } else if (l == 3) {
+                if (c.get(Calendar.DATE) == totalList.get(i).getLevelInList()) {
+                    todaysVerses.add(totalList.get(i));
+                }
+            }
+        }
+
+        //TODO Setting to randomize them
         Collections.shuffle(todaysVerses);
         verseTotal = todaysVerses.size();
-
-        //TODO FOR NOW
-        if(verseTotal==0) { finish(); }
 
         setTitle("Today's Verses");
 
@@ -266,4 +290,77 @@ public class VerseMemory extends AppCompatActivity {
             return false;
         }
     }
+
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_verse_promote, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //Log.d("MENU", id + " : ");
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_promote_verse) {
+
+            int list = totalList.get(verseIndex).getList()+1;
+
+            if(list <= 3) {
+                totalList.get(verseIndex).promote(list);
+
+                String listText = "";
+                switch (list) {
+                    case 0:
+                        listText = "Daily";
+                        break;
+                    case 1:
+                        listText = "Odd/Even";
+                        break;
+                    case 2:
+                        listText = "Week";
+                        break;
+                    case 3:
+                        listText = "Month";
+                        break;
+                    default:
+                        break;
+                }
+
+                String date[] = totalList.get(verseIndex).getStartDate().split("/");
+                int month = Integer.parseInt(date[0]);
+                int day = Integer.parseInt(date[1]);
+                int year = Integer.parseInt(date[2]);
+
+                final Calendar c = Calendar.getInstance();
+                c.set(Calendar.YEAR, year);
+                c.set(Calendar.MONTH, month-1);
+                c.set(Calendar.DATE, day);
+
+                int DOW = c.get(Calendar.DAY_OF_WEEK);
+
+                if(list == 1) {
+                    totalList.get(verseIndex).setLevelInList(day%2);
+                } else if ( list == 2) {
+                    totalList.get(verseIndex).setLevelInList(DOW);
+                } else if(list == 3) {
+                    totalList.get(verseIndex).setLevelInList(day);
+                }
+
+                Toast.makeText(getBaseContext(), "Verse Promoted to the " + listText + " list", Toast.LENGTH_SHORT).show();
+                Verses.saveVerses(getBaseContext());
+            } else {
+                Toast.makeText(getBaseContext(), "Already at max level", Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }

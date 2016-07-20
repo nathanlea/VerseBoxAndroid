@@ -16,6 +16,8 @@ public class VerseCard implements Serializable{
     private String section = null;
     private String verseStr = null;
     private boolean loved = false;
+    private int list = 0; //0-Daily 1-Odd/Even 2-Week 3-Month
+    private int levelInList = 0; //Daily 0 // 1-Odd or 0-Even //Week Level Sun-0 Sat-6 //Month 1-31
 
     private transient String VerseReference = null;
 
@@ -61,31 +63,31 @@ public class VerseCard implements Serializable{
         VerseReference = verse;
     }
 
+    public int  getList() { return list; }
+    public int  getLevelInList() { return levelInList; }
     public int getBookIndex() {return bookIndex;}
     public int getStartVerse() {return start_verse;}
     public int getEndVerse() {return end_verse;}
     public int getChapter() { return chapter;}
+    public boolean isLoved() {
+        return loved;
+    }
 
     public String getStartDate() {
         return startDate;
     }
-
     public String getEndDate() {
         return endDate;
     }
-
     public String getTopic() {
         return topic;
     }
-
     public String getSection() {
         return section;
     }
-
     public String getVerseStr() {
         return verseStr;
     }
-
     public String getVerseReference() {
         if(VerseReference==null)
             buildVerseCardStrings();
@@ -95,7 +97,6 @@ public class VerseCard implements Serializable{
     public void setLoved(boolean loved) {
         this.loved = loved;
     }
-    public boolean isLoved() {
-        return loved;
-    }
+    public void promote(int level) { this.list = level;}
+    public void setLevelInList(int level) { this.levelInList = level;}
 }

@@ -30,6 +30,7 @@ public class allVerse extends AppCompatActivity {
 
         //TODO maybe sort these by something? Gen-Rev?
 
+        MainActivity.verseList = VerseCardSort.sortbyBook();
         verseCards = MainActivity.verseList;
 
         setTitle("All Verses");
