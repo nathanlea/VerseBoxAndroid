@@ -1,16 +1,23 @@
 package com.fibonaccistudios.nathanlea.versebox;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Section extends AppCompatActivity {
 
+    static final int DATA_SET_CHANGED = 1;
+
     private StaggeredGridLayoutManager _sGridLayoutManager;
+    private Map<String, Integer> map = new HashMap<>();
+    private GridAdapter rcAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,14 +27,15 @@ public class Section extends AppCompatActivity {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
 
-        _sGridLayoutManager = new StaggeredGridLayoutManager(2,
-                StaggeredGridLayoutManager.VERTICAL);
+        _sGridLayoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+        _sGridLayoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+
         recyclerView.setLayoutManager(_sGridLayoutManager);
 
-        List<VerseGridItem> sList = getListItemData();
+        map = VerseCardSort.buildTextSizeSection();
 
-        GridAdapter rcAdapter = new GridAdapter(
-                this, sList);
+        rcAdapter = new GridAdapter(
+                this, map, 1, this);
         recyclerView.setAdapter(rcAdapter);
     }
 
@@ -40,5 +48,14 @@ public class Section extends AppCompatActivity {
             listViewItems.add(new VerseGridItem(vc.get(i).getSection()));
         }
         return listViewItems;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == DATA_SET_CHANGED) {
+            rcAdapter.notifyDataSetChanged();
+        }
     }
 }
