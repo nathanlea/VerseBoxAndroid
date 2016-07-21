@@ -30,9 +30,17 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_verse_memory" />
         <activity android:name=".allVerse" />
-        <activity android:name=".Topic"></activity>
-        <activity android:name=".Section"></activity>
-        <activity android:name=".sectionListView"></activity>
+        <activity android:name=".Topic" />
+        <activity android:name=".Section" />
+        <activity android:name=".sectionListView" />
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.fibonaccistudios.nathanlea.versebox.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -6,9 +6,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -45,6 +47,23 @@ public class VerseMemory extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        /*
+        TextView VR = (TextView) front.findViewById(R.id.verseRefFrag);
+        TextView VS = (TextView) front.findViewById(R.id.sectionFrag);
+        TextView VT = (TextView) front.findViewById(R.id.topicFrag);
+        TextView VSD = (TextView) front.findViewById(R.id.startDateFrag);
+        TextView VED = (TextView) front.findViewById(R.id.endDateFrag);
+         */
+
+        infoToReveal[0] = sharedPref.getBoolean("show_verse_ref", false);
+        infoToReveal[1] = sharedPref.getBoolean("show_section", false);
+        infoToReveal[2] = sharedPref.getBoolean("show_topic", false);
+        infoToReveal[3] = sharedPref.getBoolean("show_dates", false);
+        infoToReveal[4] = infoToReveal[3];
+
 
         setContentView(R.layout.activity_verse_memory);
 

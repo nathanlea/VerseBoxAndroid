@@ -1,6 +1,7 @@
 package com.fibonaccistudios.nathanlea.versebox;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -8,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -30,6 +33,8 @@ import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
+
+    static final int SEETING_MENU = 1;
 
     static List<BooksIDXMLParser.Book> bookID;
     static Map<String, List<BibleXMLParser.Entry>> GloablBibleMap;
@@ -107,6 +112,42 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Verses.loadVerses(this);
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //Log.d("MENU", id + " : ");
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+
+            Intent i = new Intent(getBaseContext(), SettingsActivity.class);
+            this.startActivityForResult(i, SEETING_MENU);
+            }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode==SEETING_MENU) {
+            if(resultCode==RESULT_OK) {
+                //LOAD NEW SETTINGS?
+                //SAVE SETTINGS?
+            }
+        }
     }
 
     private class DownloadBooksID extends AsyncTask<String, Void, List<BooksIDXMLParser.Book>> {
