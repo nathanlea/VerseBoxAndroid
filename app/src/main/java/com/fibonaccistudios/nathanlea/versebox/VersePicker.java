@@ -287,7 +287,8 @@ public class VersePicker extends AppCompatActivity {
                     sb.append(entry.get(i).text);
                     sb.append(" ");
                 }
-                preview.setText(sb.toString());
+                String clean = sb.toString().replaceAll("<span.*?>|</span>", "");
+                preview.setText(clean);
                 return;
             }
         }

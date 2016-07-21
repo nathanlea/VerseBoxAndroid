@@ -30,6 +30,7 @@ import java.util.Collections;
 import java.util.List;
 
 import me.grantland.widget.AutofitHelper;
+import me.grantland.widget.AutofitTextView;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -280,12 +281,12 @@ public class VerseMemory extends AppCompatActivity {
     private void backCard(List<VerseCard> v) {
 
         View front = mContentView.findViewById(R.id.card_view_back);
-        TextView preview = (TextView) front.findViewById(R.id.verse_preview_frag);
+        AutofitTextView preview = (AutofitTextView) front.findViewById(R.id.verse_preview_frag);
 
         preview.setText( v.get(verseIndex).getVerseStr());
 
-        AutofitHelper verseAUTO = AutofitHelper.create(preview);
-        verseAUTO.setMaxLines(8);
+        //AutofitHelper verseAUTO = AutofitHelper.create(preview);
+        //verseAUTO.setMaxLines(8);
     }
 
     public void PlayAnim(int viewid, Context Con, int animationid )
